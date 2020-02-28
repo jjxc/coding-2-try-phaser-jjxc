@@ -242,11 +242,11 @@ export default class MainScene extends Phaser.Scene {
     }
 
     if(this.cursorKeys.up?.isDown) {
-      this.player.setVelocityY(-300);
+      this.player.setVelocityY(-400);
     }
 
     else {
-      this.player.setVelocityY(250);
+      this.player.setVelocityY(150);
     }
   }
 
