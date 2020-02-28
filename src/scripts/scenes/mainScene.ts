@@ -25,6 +25,8 @@ export default class MainScene extends Phaser.Scene {
   explosionSound;
   pickupSound;
   music;
+  textLegend;
+  textControls;
  
   constructor() {
     super({ key: 'MainScene' });
@@ -47,27 +49,39 @@ export default class MainScene extends Phaser.Scene {
 
     this.balls = this.physics.add.group();
 
-    this.ball1 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height),"ball");
-    this.ball2 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height),"ball");
-    this.ball3 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height),"ball");
+    // this.ball1 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height-100),"ball");
+    // this.ball2 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height-200),"ball");
+    // this.ball3 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height-300),"ball");
 
-    this.balls.add(this.ball1);
-    this.balls.add(this.ball2);
-    this.balls.add(this.ball3);
-    // this.ball1.setCollideWorldBounds(true);
-    // this.ball2.setCollideWorldBounds(true);
-    // this.ball3.setCollideWorldBounds(true);
-    
+    // this.ball1.setVelocity(10,100);
+    // this.ball2.setVelocity(0,100);
+    // this.ball3.setVelocity(-10,100);
+
+    // this.balls.add(this.ball1);
+    // this.balls.add(this.ball2);
+    // this.balls.add(this.ball3);
+
 
     this.hoops = this.physics.add.group();  
 
-    var maxObjects = 4;
+    var maxBalls = 2;
+
+    for(var i = 0; i <= maxBalls; i++) {
+      var ball = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height-100),"ball");
+      ball.setScale(1.5);
+      this.balls.add(ball);
+      ball.setVelocity(100,100);
+      ball.setCollideWorldBounds(true);
+      ball.setBounce(1);
+    }
     
+    var maxObjects = 4;
+
     for(var i = 0; i <= maxObjects; i++) {
       var hoop = this.physics.add.sprite(0, 0, "hoop");
       this.hoops.add(hoop);
       hoop.setPosition(Phaser.Math.Between(10,this.scale.width), 0, this.scale.width, this.scale.height);
-      hoop.setVelocity(0,-100);
+      hoop.setVelocity(0,100);
       hoop.setCollideWorldBounds(true);
       hoop.setBounce(1);
     }
@@ -81,8 +95,8 @@ export default class MainScene extends Phaser.Scene {
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.projectiles = this.physics.add.group();
 
-    this.physics.add.collider(this.projectiles, this.hoops, this.hitBall, function (projectile, ball) {
-      projectile.destroy();
+    this.physics.add.overlap(this.balls, this.hoops, this.shootHoops, function (ball, hoop) {
+      hoop.destroy();
       },
       this);                //Collider does not work now despite all sprites being initialized with Physics
 
@@ -90,8 +104,16 @@ export default class MainScene extends Phaser.Scene {
       hoop.destroy();
       },
       this);
+
+    this.physics.add.overlap(this.player, this.balls, this.hurtPlayer, function (player, ball) {
+      hoop.destroy();
+      },
+      this);
     //this.physics.add.overlap(this.player, this.balls, this.hurtPlayer);   //FREEZES GAME
-    this.physics.add.overlap(this.projectiles, this.balls, this.hitBall);
+    this.physics.add.collider(this.projectiles, this.balls, this.hitBall, function (projectile, ball) {
+      projectile.destroy();
+      },
+      this);
 
     var graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1.0);
@@ -116,6 +138,26 @@ export default class MainScene extends Phaser.Scene {
       delay: 0
     }
     this.music.play(musicConfig);
+
+    this.textLegend = this.add.text(20,20, "Player + Ball = -30 pts\nBall + Hoop = +20 pts\nPlayer + Hoop = +10 pts\n", {
+      font: "20px Arial",
+      fill: "black"   
+    });
+
+    this.textControls = this.add.text(this.scale.width - 210,20, "Left/Right = Movement\nUp(press) = Jump\nUp(hold) = float\nSPACE = Shoot", {
+      font: "20px Arial",
+      fill: "black"   
+    });
+  }
+
+  shootHoops(ball, hoop) {
+
+    //var explosion = new Explosion(this, ball.x, ball.y);
+
+     
+    this.score += 20;                                    //FREEZES GAME
+    //var scoreFormated = this.zeroPad(this.score, 6);
+    this.scoreLabel.text = "SCORE " + this.score; 
   }
 
   pickHoops(player, hoop) {
@@ -125,31 +167,43 @@ export default class MainScene extends Phaser.Scene {
     
     this.score += 10;                                      //FREEZES GAME
     // var scoreFormated = this.zeroPad(this.score, 6);
-    console.log(this.score);
+    //console.log(this.score);
     this.scoreLabel.text = "SCORE " + this.score;
-  }
-
-  hurtPlayer(player, ball) {
-    ball.destroy();
-    player.x = this.scale.width / 2 - 8;
-    player.y = this.scale.height - 64;
   }
 
   hitBall(projectiles, ball) {
 
-    var explosion = new Explosion(this, ball.x, ball.y);
-
-     
-    // this.score += 15;                                    //FREEZES GAME
-    // var scoreFormated = this.zeroPad(this.score, 6);
-    // this.scoreLabel.text = "SCORE " + this.score;
   }
+
+  hurtPlayer(player, ball) {
+
+    if(this.player.alpha < 1) {
+      return;
+    }
+    player.disableBody(true, true);
+    
+    this.time.addEvent({
+      delay:1000,
+      callback: this.resetPlayer,
+      callbackScope: this,
+      loop: false
+    });
+
+    if(this.score <= 0) {
+      this.score -= 30;                                      //FREEZES GAME
+      this.scoreLabel.text = "SCORE " + this.score;
+    }
+  }
+
+  
 
   update() {
     this.movePlayerManager();
 
     if(Phaser.Input.Keyboard.JustDown(this.spacebar)) {
-      this.attack();
+      if(this.player.active) {
+        this.attack();
+      }
 
     }
 
@@ -175,11 +229,11 @@ export default class MainScene extends Phaser.Scene {
   }
   movePlayerManager() {
     if(this.cursorKeys.left?.isDown) {
-      this.player.setVelocityX(-200);
+      this.player.setVelocityX(-300);
       this.player.flipX = false;
     }
     else if(this.cursorKeys.right?.isDown) {
-      this.player.setVelocityX(200);
+      this.player.setVelocityX(300);
       this.player.flipX = true;
     }
 
@@ -201,10 +255,23 @@ export default class MainScene extends Phaser.Scene {
     this.beamSound.play();
   }
 
-  resetBallPos(ball) {
-    ball.y = 0;
-    var randX = Phaser.Math.Between(0,this.scale.width)
-    ball.x = randX;
+  resetPlayer() {
+    var x = this.scale.width / 2 - 8;
+    var y = this.scale.height + 64;
+    this.player.enableBody(true,x,y,true,true);
+
+    this.player.alpha = 0.5;
+
+    this.time.addEvent({
+      delay:1500,
+      callback: this.respawn,
+      callbackScope: this,
+      loop: false
+    });
+  }
+
+  respawn() {
+    this.player.alpha = 1;
   }
 
   zeroPad(number, size) {
