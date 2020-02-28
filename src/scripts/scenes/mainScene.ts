@@ -21,6 +21,10 @@ export default class MainScene extends Phaser.Scene {
   balls: Phaser.Physics.Arcade.Group;
   scoreLabel;
   score;
+  beamSound;
+  explosionSound;
+  pickupSound;
+  music;
  
   constructor() {
     super({ key: 'MainScene' });
@@ -95,6 +99,23 @@ export default class MainScene extends Phaser.Scene {
 
     this.score = 0;
     this.scoreLabel = this.add.bitmapText(10,5,"pixelFont", "SCORE ", 16);
+
+    this.beamSound = this.sound.add("audio_beam");
+    this.beamSound.volume = 0.1;                                //SOOO LOUD 
+    this.explosionSound = this.sound.add("audio_explosion");
+    this.pickupSound = this.sound.add("audio_pickup");
+    this.music = this.sound.add("music");
+
+    var musicConfig = {
+      mute: false,
+      volume: 0.1,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: false,
+      delay: 0
+    }
+    this.music.play(musicConfig);
   }
 
   pickHoops(player, hoop) {
@@ -177,6 +198,7 @@ export default class MainScene extends Phaser.Scene {
 
   attack() {
     var beam = new Beam(this);
+    this.beamSound.play();
   }
 
   resetBallPos(ball) {
