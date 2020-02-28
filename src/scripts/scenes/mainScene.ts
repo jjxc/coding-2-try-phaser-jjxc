@@ -64,7 +64,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.hoops = this.physics.add.group();  
 
-    var maxBalls = 2;
+    var maxBalls = 1;
 
     for(var i = 0; i <= maxBalls; i++) {
       var ball = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height-100),"ball");
