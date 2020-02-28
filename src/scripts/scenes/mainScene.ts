@@ -40,13 +40,13 @@ export default class MainScene extends Phaser.Scene {
     this.foreground.setScrollFactor(0);
     this.foreground.y = 550;
 
-    
-    
+
+    this.balls = this.physics.add.group();
+
     this.ball1 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height),"ball");
     this.ball2 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height),"ball");
     this.ball3 = this.physics.add.sprite(Phaser.Math.Between(10,this.scale.width), Phaser.Math.Between(10,this.scale.height),"ball");
-    
-    this.balls = this.physics.add.group();
+
     this.balls.add(this.ball1);
     this.balls.add(this.ball2);
     this.balls.add(this.ball3);
@@ -55,8 +55,7 @@ export default class MainScene extends Phaser.Scene {
     // this.ball3.setCollideWorldBounds(true);
     
 
-    this.hoops = this.physics.add.group();
-    
+    this.hoops = this.physics.add.group();  
 
     var maxObjects = 4;
     
@@ -78,28 +77,35 @@ export default class MainScene extends Phaser.Scene {
     this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.projectiles = this.physics.add.group();
 
-    this.physics.add.collider(this.projectiles, this.hoops);                //Collider does not work now despite all sprites being initialized with Physics
+    this.physics.add.collider(this.projectiles, this.hoops, this.hitBall, function (projectile, ball) {
+      projectile.destroy();
+      },
+      this);                //Collider does not work now despite all sprites being initialized with Physics
 
-    this.physics.add.overlap(this.player, this.hoops, this.pickHoops);
+    this.physics.add.overlap(this.player, this.hoops, this.pickHoops, function (player, hoop) {
+      hoop.destroy();
+      },
+      this);
     //this.physics.add.overlap(this.player, this.balls, this.hurtPlayer);   //FREEZES GAME
     this.physics.add.overlap(this.projectiles, this.balls, this.hitBall);
 
     var graphics = this.add.graphics();
     graphics.fillStyle(0x000000, 1.0);
     graphics.fillRect(0,0,this.scale.width,20);
-    this.score = 0;
 
+    this.score = 0;
     this.scoreLabel = this.add.bitmapText(10,5,"pixelFont", "SCORE ", 16);
   }
 
   pickHoops(player, hoop) {
-    hoop.disableBody(true, true);
+    //hoop.disableBody(true, true);
 
     //var explosion = new Explosion(this, hoop.x, hoop.y);    //FREEZES GAME
     
-    // this.score += 10;                                      //FREEZES GAME
+    this.score += 10;                                      //FREEZES GAME
     // var scoreFormated = this.zeroPad(this.score, 6);
-    // this.scoreLabel.text = "SCORE " + this.score;
+    console.log(this.score);
+    this.scoreLabel.text = "SCORE " + this.score;
   }
 
   hurtPlayer(player, ball) {
@@ -112,9 +118,7 @@ export default class MainScene extends Phaser.Scene {
 
     var explosion = new Explosion(this, ball.x, ball.y);
 
-    projectiles.destroy();
-    
-    this.resetBallPos(ball);  
+     
     // this.score += 15;                                    //FREEZES GAME
     // var scoreFormated = this.zeroPad(this.score, 6);
     // this.scoreLabel.text = "SCORE " + this.score;
@@ -132,6 +136,19 @@ export default class MainScene extends Phaser.Scene {
       let beam = this.projectiles.getChildren()[i];
       beam.update();
     }
+
+
+    if(!this.hoops.countActive()) {
+      var maxObjects = 4
+      for(var i = 0; i <= maxObjects; i++) {
+        var hoop = this.physics.add.sprite(0, 0, "hoop");
+        this.hoops.add(hoop);
+        hoop.setPosition(Phaser.Math.Between(10,this.scale.width), 0, this.scale.width, this.scale.height);
+        hoop.setVelocity(0,-100);
+        hoop.setCollideWorldBounds(true);
+        hoop.setBounce(1);
+      }
+    };
     
 
   }
