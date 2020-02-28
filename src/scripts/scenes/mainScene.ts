@@ -20,7 +20,7 @@ export default class MainScene extends Phaser.Scene {
   hoops: Phaser.Physics.Arcade.Group;
   balls: Phaser.Physics.Arcade.Group;
   scoreLabel;
-  score;
+  score: number = 0;
   beamSound;
   explosionSound;
   pickupSound;
@@ -189,10 +189,13 @@ export default class MainScene extends Phaser.Scene {
       loop: false
     });
 
-    if(this.score <= 0) {
-      this.score -= 30;                                      //FREEZES GAME
-      this.scoreLabel.text = "SCORE " + this.score;
+    if(this.score - 30 >= 0) {  
+      this.score -= 30;                                      //FREEZES GAME  
     }
+    else {
+      this.score = 0;
+    }
+    this.scoreLabel.text = "SCORE " + this.score;
   }
 
   
