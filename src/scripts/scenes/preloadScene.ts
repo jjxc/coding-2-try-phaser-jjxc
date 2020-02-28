@@ -4,29 +4,29 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("background", "assets/images/back_combine_62_63.png");
-    this.load.image("midground", "assets/images/midground.png");
-    this.load.image("foreground", "assets/images/foreground.png");
-    this.load.spritesheet("player", "assets/spritesheets/wind_sprite_anim.png", {
+    this.load.image("background", "./assets/images/back_combine_62_63.png");
+    this.load.image("midground", "./assets/images/midground.png");
+    this.load.image("foreground", "./assets/images/foreground.png");
+    this.load.spritesheet("player", "./assets/spritesheets/wind_sprite_anim.png", {
       frameWidth: 160,
       frameHeight: 130
     });
-    this.load.spritesheet("beam", "assets/spritesheets/beam.png", {
+    this.load.spritesheet("beam", "./assets/spritesheets/beam.png", {
       frameWidth: 16,
       frameHeight: 16
     });
   
-    this.load.spritesheet("hoop", "assets/spritesheets/hoop.png", {
+    this.load.spritesheet("hoop", "./assets/spritesheets/hoop.png", {
       frameWidth: 126,
       frameHeight: 42
     });
 
-    this.load.spritesheet("ball", "assets/spritesheets/power-up.png", {
+    this.load.spritesheet("ball", "./assets/spritesheets/power-up.png", {
       frameWidth: 16,
       frameHeight: 16
     });
     
-    this.load.bitmapFont("pixelFont", "assets/font/font.png", "assets/font/font.xml");
+    this.load.bitmapFont("pixelFont", "./assets/font/font.png", "assets/font/font.xml");
 
     
   }
