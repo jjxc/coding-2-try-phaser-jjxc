@@ -4,7 +4,7 @@ waltz:
 meta:
   version: 0.0.2
   gdd authors:
-    - Your name goes here
+    - Jonathan Chang
   template authors:
     - Austin Cory Bart <acbart@udel.edu>
     - Mark Sheriff
@@ -14,11 +14,11 @@ meta:
 
 # Overview
 
-*Notes written in italics must be deleted in the final version.*
+Dodge balls while trying to use them to score!
 
 ## Elevator Pitch
 
-*A one sentence pitch for your game. Pretend that your were pitching your game to a executive going to the elevator. You have less than 60 Seconds. Check [this resource](http://www.gameacademy.com/perfecting-indie-games-elevator-pitch/) for more information.*
+A 2D hooping game where the player must make quick decisions by contrasting safety or risk points to continuously increase their score.
 
 ## Influences (Brief)
 
@@ -34,14 +34,17 @@ meta:
 
 ## Core Gameplay Mechanics (Brief)
 
-*Give a very high-level description of any core gameplay mechanics*
-
-- *Gameplay Mechanic #1*
-- *Gameplay Mechanic #2*
-- *Gameplay Mechanic #3*
-- *Gameplay Mechanic #4*
+- Float around map 
+- Shoot projectiles
+- Projectiles and Balls collide
+- Player/Balls overlap hoops to earn points
+- Player and Balls overlap to lose points
 
 # Learning Aspects
+
+- Quick decision making
+- Risk/Reward deduction due to punishing scoring structure
+- Predicting object trajectory from two objects colliding
 
 ## Learning Domains
 
@@ -49,7 +52,7 @@ meta:
 
 ## Target Audiences
 
-*Who are your learners?*
+Elementary/Middle-School aged children.
 
 ## Target Contexts
 
@@ -57,18 +60,17 @@ meta:
 
 ## Learning Objectives
 
-*Remember, Learning Objectives are NOT simply topics. They are statements of observable behavior that a learner can do after the learning experience. You cannot observe someone "understanding" or "knowing" something.*
-
-- *Formal Learning Objective #1*
-- *Formal Learning Objective #2*
-- *Formal Learning Objective #3*
+- Assess which scoring method would net more points/benefit for each hoop
+- Apply trajectory mapping to score using the collision mechanic 
+- Recognize when to take the safe, lesser scoring option to not lose points
+- Prioritize long-term scoring by utilizing risk-reward assesment
 
 ## Prerequisite Knowledge
 
 *What do they need to know prior to trying this game?*
 
-- *Prerequisite Learning Objective #1*
-- *Prerequisite Learning Objective #2*
+- Player movement in common 2D platformers/sidescrollers
+- How to press buttons on a keyboard
 
 ## Assessment Measures
 
